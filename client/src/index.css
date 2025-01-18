@@ -1,0 +1,32 @@
+* {
+    transition: all 0.3s ease-out;
+    box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  padding: 0%;
+  margin: 0;
+  font-family: 'Poppins', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #ebf0fc;
+}
+
+body {
+  max-width: 2000px;
+  margin: 0 auto;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  padding: 0px;
+  margin: 0px;
+}

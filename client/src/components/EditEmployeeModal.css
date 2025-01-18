@@ -1,0 +1,77 @@
+.modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding: 20px; 
+}
+
+.modal-form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 500px;
+    width: 100%;
+    position: relative;
+    max-height: 100vh; /* Set a max height for the modal */
+    overflow-y: auto;
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding: 20px; 
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-header h2 {
+    font-size: 24px;
+}
+
+.close-btn {
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.modal-form label {
+    font-size: 16px;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.modal-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.submit-button-edit{
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    position: sticky; /*Make the button sticky*/
+    bottom: 0; /* Stick to the bottom */
+    margin-top: 20px; 
+}
+
+.modal-form .image-preview {
+    max-height: 100px;
+    width:  auto;
+    margin-top: 10px;
+}

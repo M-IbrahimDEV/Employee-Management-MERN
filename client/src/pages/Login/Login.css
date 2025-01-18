@@ -1,0 +1,102 @@
+ .login-cont{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.login{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.login {
+    margin: 20px;
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    padding: 2rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.login h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    /* color: #4a90e2; */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.login form{
+    width: 100%;
+}
+.login input {
+    width: 100%;
+    padding: 1rem;
+    margin: 0.5rem 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #333;
+    background: #f9f9f9;
+    transition: all 0.3s ease;
+}
+
+.login button[type="submit"] {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+    color: #fff;
+    background: linear-gradient(135deg, #4a90e2, #6a5acd);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-top: 1rem;
+    transition: all 0.3s ease;
+}
+.login button[type="submit"]:hover {
+    background: linear-gradient(135deg, #6a5acd, #4a90e2);
+    box-shadow: 0 4px 10px rgba(74, 144, 226, 0.5);
+}
+.login .signup-button{
+    width: 100%;
+    background: none;
+    color: #6a5acd;
+    border: 1px solid #6a5acd;
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+.login .signup-button:hover{
+    background: #6a5acd;
+    color: #fff;
+}
+@media (max-width: 768px) {
+    .login {
+        padding: 1.5rem;
+    }
+
+    .login h1 {
+        font-size: 1.8rem;
+    }
+
+    .login input[type="email"],
+    .login input[type="password"],
+    .login button {
+        font-size: 0.9rem;
+        padding: 0.8rem;
+    }
+}

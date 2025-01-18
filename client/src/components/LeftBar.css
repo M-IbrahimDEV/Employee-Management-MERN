@@ -1,0 +1,41 @@
+.leftbar-container {
+    padding: 10px;
+    background-color: #f4f4f4;
+    min-height: calc(100vh - 4rem);
+    width: 350px;
+    position: relative; 
+}
+
+.profile-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.employee-image {
+    width: 95%;
+    border-radius: 16px;
+}
+
+.profile-details h1{
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+.edit-button, .delete-button{
+    position: absolute;  /* Position the button absolutely */
+    bottom: 20px;        /* Place it 20px from the bottom */
+    width: calc(100% - 20px);
+    
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 10px;
+}
+
+.edit-button{
+    bottom: 76px;
+    background-color: #4CAF50;
+}
+.delete-button{
+    background-color: red;
+}
