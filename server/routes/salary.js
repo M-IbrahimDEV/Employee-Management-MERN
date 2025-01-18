@@ -1,121 +1,3 @@
-
-// import express from 'express';
-// import mongoose from 'mongoose';
-// import { Employees } from '../models/Employees.js'; // Adjust the path as per your file structure
-
-// const router = express.Router();  // Use express.Router() instead of express.attendence()
-
-
-// router.get('/', async (req, res) => {
-//     try {
-        
-//         const email = req.body;
-//         const employee = await Employees.findOne({ email:email });
-
-//         if (!employee) {
-//             return res.status(404).json({ message: 'Employee not found.' });
-//         }
-
-//         res.json(employee.salary);
-
-//     } catch (error) {
-//         console.error('Error getting employee:', error);
-//         res.status(500).json({ message: 'Failed to get employee.' });
-//     }
-// });
-
-// router.get('/history', async (req, res) => {
-//     try {
-        
-//         const email = req.body;
-//         const employee = await Employees.findOne({ email:email });
-
-//         if (!employee) {
-//             return res.status(404).json({ message: 'Employee not found.' });
-//         }
-
-//         res.json(employee.allsalary);
-
-//     } catch (error) {
-//         console.error('Error getting employee:', error);
-//         res.status(500).json({ message: 'Failed to get employee.' });
-//     }
-// });
-
-// router.get('/bonus', async (req, res) => {
-//     try {
-        
-//         const email = req.body;
-//         const employee = await Employees.findOne({ email:email });
-
-//         if (!employee) {
-//             return res.status(404).json({ message: 'Employee not found.' });
-//         }
-//         //has to return this months bonus
-//         res.json();
-
-//     } catch (error) {
-//         console.error('Error getting employee:', error);
-//         res.status(500).json({ message: 'Failed to get employee.' });
-//     }
-// });
-
-// router.get('/bonus/history', async (req, res) => {
-//     try {
-        
-//         const email = req.body;
-//         const employee = await Employees.findOne({ email:email });
-
-//         if (!employee) {
-//             return res.status(404).json({ message: 'Employee not found.' });
-//         }
-//         //has to return all months history
-//         res.json();
-
-//     } catch (error) {
-//         console.error('Error getting employee:', error);
-//         res.status(500).json({ message: 'Failed to get employee.' });
-//     }
-// });
-
-
-
-
-
-
-// export { router as salary };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//
-
-
-
-
-
-
-
-
-
-
-
 import express from 'express';
 import { Employees } from '../models/Employees.js'; // Adjust path if needed
 
@@ -124,13 +6,13 @@ const router = express.Router();
 // Helper function to get the first day of the current month
 const getCurrentMonthStart = () => {
     const now = new Date();
-    return new Date(now.getFullYear(), now.getMonth(), 1);
+    return new Date(now.getFullYear(), now.getMonth(), 2);
 };
 
 
 
 const getMonthStart = (date) => {
-    return new Date(date.getFullYear(), date.getMonth(), 1);
+    return new Date(date.getFullYear(), date.getMonth(), 2);
 };
 
 // Middleware to validate admin
@@ -153,7 +35,7 @@ const validateAdmin = async (req, res, next) => {
 };
 
 // Get this month's salary (and insert if missing)
-router.get('/salary', async (req, res) => {
+router.get('/', async (req, res) => {
     const { email } = req.body;
 
     if (!email) {
@@ -197,7 +79,7 @@ router.get('/salary', async (req, res) => {
 });
 
 // Update this month's salary and bonus
-router.patch('/salary', validateAdmin, async (req, res) => {
+router.patch('/', validateAdmin, async (req, res) => {
     const { email, amount, bonus } = req.body;
 
     if (!email) {
@@ -213,6 +95,10 @@ router.patch('/salary', validateAdmin, async (req, res) => {
 
         const currentMonthStart = getCurrentMonthStart();
 
+        let salaryIndex = employee.allsalary.findIndex(
+            (s) => s.date && new Date(s.date).getTime() === currentMonthStart.getTime()
+        );
+
         if (salaryIndex === -1) {
             const lastSalary = employee.allsalary[employee.allsalary.length - 1] || {};
             employee.allsalary.push({
@@ -222,7 +108,7 @@ router.patch('/salary', validateAdmin, async (req, res) => {
                 status: 'notpaid',
             });
             await employee.save();
-            const salaryIndex = employee.allsalary.findIndex(
+            salaryIndex = employee.allsalary.findIndex(
                 (s) => s.date && new Date(s.date).getTime() === currentMonthStart.getTime()
             );
             if (salaryIndex === -1){
@@ -248,7 +134,7 @@ router.patch('/salary', validateAdmin, async (req, res) => {
 });
 
 // Get salary history
-router.get('/salary/history', async (req, res) => {
+router.get('/history', async (req, res) => {
     const { email } = req.body;
 
     if (!email) {
@@ -271,7 +157,7 @@ router.get('/salary/history', async (req, res) => {
 
 
 // Update older month's salary status
-router.patch('/salary/status', validateAdmin, async (req, res) => {
+router.patch('/status', validateAdmin, async (req, res) => {
     const { email, date, status } = req.body;
 
     if (!email || !date || !status) {
