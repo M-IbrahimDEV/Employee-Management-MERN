@@ -69,7 +69,7 @@
 // };
 
 // export default Login;
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
@@ -78,6 +78,11 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
+
+
+    useEffect(()=>{
+        localStorage.clear();
+    }, [])
 
     const handleLogin = async (e) => {
         e.preventDefault();

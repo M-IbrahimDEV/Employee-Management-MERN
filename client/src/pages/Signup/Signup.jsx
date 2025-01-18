@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Signup.css';
 
@@ -13,6 +13,11 @@ const Signup = () => {
     });
     const [error, setError] = useState('');
     const navigate = useNavigate();
+
+
+    useEffect(()=>{
+        localStorage.clear();
+    }, [])
 
     const handleSignup = async (e) => {
         e.preventDefault();

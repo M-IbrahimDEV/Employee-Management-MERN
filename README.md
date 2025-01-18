@@ -18,7 +18,6 @@ If you are not a programmer, follow these simple steps to run the application on
    - Once downloaded, locate the ZIP file (likely in your "Downloads" folder), right-click it, and select "Extract All" or use any file extraction tool.
    - Choose a location where you want the files to be extracted (e.g., Desktop or Documents).
 
-
 2. **Install Node.js:**
    - Go to [Node.js](https://nodejs.org/) and download the LTS version.
    - Install it by running the downloaded file and following the installation steps.
@@ -27,7 +26,6 @@ If you are not a programmer, follow these simple steps to run the application on
    - Download MongoDB Community Edition from [MongoDB](https://www.mongodb.com/try/download/community).
    - Install MongoDB on your system and ensure the MongoDB server is running (you may need to start it manually from the Services tab on Windows or using terminal commands on Mac/Linux).
    - make a file in server folder and name it `.env` and add `PORT=8000 DATABASE_URL=mongodb://localhost:27017` in it
-
 
 ### Steps to Start the App:
 1. **Open the Project Folder:**
@@ -56,7 +54,6 @@ If you are not a programmer, follow these simple steps to run the application on
 3. **Start the Frontend:**
    - Open a new terminal window (or tab)
    - Navigate to the `client` folder:
-    
      ```bash
      cd path/to/extracted-folder/client
      ```
@@ -103,12 +100,11 @@ This section explains the features and how to use the Employee Management System
    - Admins can send you resources. 
 
 7. **Employee Management:** 
-    - Admins can view and manage employee attendence, salary, bonus and fines.
-    - Admins can add, edit, or delete employees.
-    - Admins can manage employee roles and permissions.
-    - Admins can view employee leave requests and approve/reject them.
-    - Admins can approve New Employee registration.
-
+   - Admins can view and manage employee attendence, salary, bonus and fines.
+   - Admins can add, edit, or delete employees.
+   - Admins can manage employee roles and permissions.
+   - Admins can view employee leave requests and approve/reject them.
+   - Admins can approve New Employee registration.
 
 ---
 
@@ -119,8 +115,9 @@ If you are a developer and want to contribute to or modify this project, here is
 ### Folder Structure:
 ```
 root-directory/
-  |-- server/ (the backend)
-  |-- client/ (the frontend)
+   |-- server/ (the backend)
+   |-- client/ (the frontend)
+   |-- screenshots/ (app screenshots)
 ```
 
 ### Developer Setup:
@@ -164,5 +161,15 @@ Here are some example API routes:
 
 ---
 
-Feel free to edit this README to match your app's specific details!
+## Screenshots
+
+Screenshots for the application are located in the `screenshots` folder in the root directory. Below are the included pages:
+- Login Page
+    ![Login Page](screenshots/ss1.jpg)
+- Sign-Up Page
+    ![Signup Page](screenshots/ss2.jpg)
+- Waiting Approval Page
+    ![Waiting Approal Page](screenshots/ss3.jpg)
+- Settings
+    ![Settings Page](screenshots/ss4.jpg)
 
