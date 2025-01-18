@@ -24,21 +24,19 @@ const EmployeeSchema = new Schema({
         enum: ['user', 'admin'], 
         default: 'user' ,
     },
-    salary: { 
-        type: Number,
-        default: 0,
-    },
-    bonuses: 
-    [{ 
+    allsalary: [{ 
         amount: Number,
+        bonus: Number,
         date: Date,
-        description: String,
+        status: { type: String, 
+            enum: ['paid', 'notpaid'] 
+        } 
     }],
     attendance: 
     [{ 
         date: Date, 
         status: { type: String, 
-            enum: ['present', 'absent', 'late', 'leave'] 
+            enum: ['present', 'absent', 'late', 'leave', 'requested'] 
         } 
     }],
     isApproved: { 

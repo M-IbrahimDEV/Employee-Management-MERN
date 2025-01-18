@@ -71,6 +71,22 @@ If you face any issues, ensure Node.js and MongoDB are properly installed and ru
 
 ---
 
+## Screenshots
+
+Screenshots for the application are located in the `screenshots` folder in the root directory. Below are the included pages:
+- Login Page
+    ![Login Page](screenshots/ss1.jpg)
+- Sign-Up Page
+    ![Signup Page](screenshots/ss2.jpg)
+- Waiting Approval Page
+    ![Waiting Approal Page](screenshots/ss3.jpg)
+- User Settings Page
+    ![Settings Page](screenshots/ss4.jpg)
+- This project is incomplete so all screenshots are not yet added
+
+---
+
+
 ## How to Use the Application
 
 This section explains the features and how to use the Employee Management System:
@@ -161,15 +177,4 @@ Here are some example API routes:
 
 ---
 
-## Screenshots
-
-Screenshots for the application are located in the `screenshots` folder in the root directory. Below are the included pages:
-- Login Page
-    ![Login Page](screenshots/ss1.jpg)
-- Sign-Up Page
-    ![Signup Page](screenshots/ss2.jpg)
-- Waiting Approval Page
-    ![Waiting Approal Page](screenshots/ss3.jpg)
-- Settings
-    ![Settings Page](screenshots/ss4.jpg)
 

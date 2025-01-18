@@ -3,16 +3,13 @@ import { Employees } from '../models/Employees.js';
 
 const router = express.Router();
 
-// Route to get an employee by ID
-router.get('/:id', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
-        const userId = req.params.id;
-        const employee = await Employees.findById(userId);
-
+        const email = req.body.email;
+        const employee = await Employees.findOne({ email:email });
         if (!employee) {
             return res.status(404).json({ message: 'Employee not found.' });
         }
-
         res.json(employee);
     } catch (error) {
         console.error('Error getting employee:', error);
@@ -20,4 +17,6 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-export { router as getEmployeeById };
+export { router as getEmployee };
+
+

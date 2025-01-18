@@ -42,9 +42,9 @@ app.use('/isapproved', checkapproved);
 app.use('/passwordsreset', passwordreset);
 app.use('/getemployee', getEmployee);
 app.use('/updateemployee', updateEmployee);
-app.use('/attendence', attendance);
-app.use('/salary', salary);
 
 
+app.use('/employee', attendance);
+app.use('/employee', salary);
 
 app.listen

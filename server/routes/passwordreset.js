@@ -8,21 +8,21 @@ router.post('/', async (req, res) => {
     try {
 
 
-        const { email, password } = req.body;
+        const { email, oldpassword, newpassword } = req.body;
         
         const user = await Employees.findOne({ email:email });
         if (!user) {
             return res.status(404).json({ message: 'User  not found.' });
         }
 
-        if (user.password !== password) {
+        if (user.password !== oldpassword) {
             return res.status(401).json({ message: 'Invalid password.' });
         }
-        if (!user.isApproved) {
-            return res.status(200).json({ message: 'Waiting for approval.', isApproved: false, email: email });
-        }
-        res.status(200).json({ message: 'Login successful.', isApproved: true, user });
 
+        user.password = newpassword;
+        await user.save();
+
+        res.status(200).json({ message: 'Password reset successfully.' });
 
     } catch (error) {
 
@@ -34,4 +34,4 @@ router.post('/', async (req, res) => {
     }
 });
 
-export { router as login };
+export { router as passwordreset };

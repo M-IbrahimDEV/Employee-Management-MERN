@@ -1,11 +1,10 @@
-import express from 'express'
-import { Employees } from '../models/Employees.js'
+import express from 'express';
 import multer from 'multer';
-
+import { Employees } from '../models/Employees.js';
 
 const router = express.Router();
 
-// Configure multer to save files in 'public/images'
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'public/images'); // Path to save images
@@ -16,47 +15,45 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-
-// router.put("/:id", async(req, res) => {
-//     try {
-//         const employee = await Employees.findByIdAndUpdate(
-//             req.params.id,
-//             req.body,
-//             { new: true }
-//         );
-//         if (!employee) {
-//             return res.status(404).send('Employee not found!');
-//         }
-//         res.send("Employee updated successfully!");
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).send(`Error updating the employee: ${error.message}`);
-//     }
-// });
-
-router.put("/:id", upload.single('image'), async (req, res) => {
+router.put('/', upload.single('image'), async (req, res) => {
     try {
+        const email = req.body.email;
         const updateData = { ...req.body };
 
-        // If a new image is uploaded, include its path in the update
         if (req.file) {
             updateData.image = `/images/${req.file.filename}`;
         }
 
-        const employee = await Employees.findByIdAndUpdate(
-            req.params.id,
-            updateData,
-            { new: true }
+        const oldemployee = await Employees.findOne(
+            { email:email }
+        ) 
+
+        if (!oldemployee) {
+            return res.status(404).json({ message: 'Employee not found.' });
+        }
+        
+        updateData.password = oldemployee.password;
+
+        const employee = await Employees.findOneAndUpdate(
+            { email:email },
+            updateData
         );
 
+
         if (!employee) {
-            return res.status(404).send('Employee not found!');
+            return res.status(404).json({ message: 'Employee not found.' });
         }
 
-        res.send("Employee updated successfully!");
+        
+        const updatedemployee = await Employees.findOne(
+            { email:email }
+        );
+
+        res.json(updatedemployee);
+
     } catch (error) {
-        console.error(error);
-        res.status(500).send(`Error updating the employee: ${error.message}`);
+        console.error('Error updating employee:', error);
+        res.status(500).json({ message: 'Failed to update employee.' });
     }
 });
 

@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './WaitingApproval.css';
 
 const WaitingApproval = () => {
+    const navigate = useNavigate();
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({
         firstname: '',
@@ -13,6 +15,13 @@ const WaitingApproval = () => {
     const [error, setError] = useState('');
 
     const userEmail = localStorage.getItem('email'); // Get the user ID from LocalStorage
+
+    
+    useEffect(() => {
+        if (!userEmail) {
+            navigate('/');
+        }
+    }, [])
 
     useEffect(() => {
         const updateerror = async () => {
@@ -122,8 +131,9 @@ const WaitingApproval = () => {
                         type="email"
                         name="email"
                         value={formData.email}
-                        onChange={handleInputChange}
                         required
+                        readOnly
+                        className='readOnly'
                     />
 
                     <label>Phone</label>

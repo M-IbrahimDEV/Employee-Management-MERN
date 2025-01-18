@@ -121,3 +121,19 @@
         height: 80px;
     }
 }
+
+
+.waiting-approval .form-container  .readOnly{
+    opacity: 0.5;
+    border: 1px solid #ccc !important;
+    border: none;
+    -webkit-user-select: none; 
+    -ms-user-select: none;
+    user-select: none; 
+    pointer-events: none;
+}
+.waiting-approval .form-container  .readOnly:focus{
+    box-shadow: none;
+    border: 1px solid #ccc !important;
+    border: none;
+}
