@@ -26,7 +26,7 @@ If you are not a programmer, follow these simple steps to run the application on
 3. **Install MongoDB:**
    - Download MongoDB Community Edition from [MongoDB](https://www.mongodb.com/try/download/community).
    - Install MongoDB on your system and ensure the MongoDB server is running (you may need to start it manually from the Services tab on Windows or using terminal commands on Mac/Linux).
-   - make a file in server folder and name it ".env" and add "PORT=8000 DATABASE_URL=mongodb://localhost:27017" in it
+   - make a file in server folder and name it `.env` and add `PORT=8000 DATABASE_URL=mongodb://localhost:27017` in it
 
 
 ### Steps to Start the App:
