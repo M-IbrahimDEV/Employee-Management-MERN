@@ -4,7 +4,7 @@ import { Employees } from '../models/Employees.js';
 const router = express.Router();
 
 // check route
-router.get('/', async (req, res) => {
+router.post('/', async (req, res) => {
     try {
 
 

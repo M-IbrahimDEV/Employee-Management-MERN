@@ -1,75 +1,22 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './UserDashboard.css';
+import { Chart } from "react-google-charts";
 
 
 
 
 const UserDashboard = () => {
-
-
-
-
-
-
-
-
-    const calendarData = {
-        "2025-01": {
-            1: "present",
-            2: "absent",
-            3: "late",
-            4: "leave",
-            5: "present",
-            6: "present",
-            7: "absent",
-        },
-        "2024-12": {
-            28: "leave",
-            29: "present",
-            30: "late",
-            31: "absent",
-        },
-    };
-
-    // Utility to get a calendar for a given month.
-    const getCalendarDays = (year, month) => {
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-        return Array.from({ length: daysInMonth }, (_, i) => i + 1);
-    };
-
-    const renderCalendar = (year, month, data) => {
-        const days = getCalendarDays(year, month);
-        return (
-            <div className="calendar">
-                {days.map((day) => (
-                    <div
-                        key={day}
-                        className={`calendar-day ${data[day] || "default"}`}
-                    >
-                        {day}
-                    </div>
-                ))}
-            </div>
-        );
-    };
-
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    const currentMonth = currentDate.getMonth(); // 0-based
-
-
-
-
-
-
-
-    const [activeTab, setActiveTab] = useState('settings'); // Tracks the active tab
-    const [userData, setUserData] = useState(null); // User info data
-    //const [attendance, setAttendance] = useState([]); // Attendance data
-    const [salary, setSalary] = useState(null); // Salary data
-    const [error, setError] = useState('');
     const navigate = useNavigate();
+
+
+    const [activeTab, setActiveTab] = useState('attendance');
+    const [userData, setUserData] = useState(null);
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [attendance, setAttendance] = useState(null);
+    const [currentSalary, setCurrentSalary] = useState({});
+    const [salaryHistory, setSalaryHistory] = useState([]);
+    const [error, setError] = useState('');
 
     const userEmail = localStorage.getItem('email');
 
@@ -80,25 +27,36 @@ const UserDashboard = () => {
     }, [])
 
     useEffect(() => {
+        const checkapproved = async () => {
+            if (userEmail) {
+                try {
+                    console.log(userEmail);
+                    const response = await fetch(`http://localhost:8000/isapproved/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ email: userEmail })
+                    });
+                    const data = await response.json();
+
+                    if (!data.isApproved) {
+                        navigate('/waiting-approval');
+                    }
+                } catch (error) {
+                    console.error('Error retrieving user data:', error);
+                    setError('Failed to retrieve user data.');
+                }
+            }
+        }
+        checkapproved();
+
+    }, [])
+
+    useEffect(() => {
         const fetchAndMarkAttendance = async () => {
             try {
-                // Fetch user data first
-                console.log("user-email:", userEmail);
-                const response = await fetch(`http://localhost:8000/employee/email/${userEmail}`);
-                console.log("responce");
-                console.log(response);
-                const data = await response.json();
-                console.log("data");
-                console.log(data);
-
-                if (!response.ok) {
-                    throw new Error('Failed to retrieve user data.');
-                }
-
-
-
-                // Post attendance data
-                const attendanceResponse = await fetch(`http://localhost:8000/employee/attendence/today`, {
+                const attendanceResponse = await fetch(`http://localhost:8000/attendence/today`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -110,13 +68,26 @@ const UserDashboard = () => {
                     throw new Error('Failed to mark attendance.');
                 }
 
-                // Fetch user data again to ensure it's updated
-                setUserData(data);
+
+                const response = await fetch(`http://localhost:8000/attendence`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email: userEmail }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch attendance data.');
+                }
+
+                const data = await response.json();
+                setAttendance(data);
+                console.log(data);
 
             } catch (error) {
-                console.log("was here ...");
                 console.error('Error:', error);
-                setError('Failed to fetch user data or mark attendance.');
+                setError('Failed to mark or get attendance.');
             }
         };
 
@@ -124,28 +95,113 @@ const UserDashboard = () => {
     }, [userEmail]);
 
     useEffect(() => {
-//         const fetchAttendanceData = async () => {
-//             try {
-//      //           const response = await fetch(`http://localhost:8000/employee/attendence/${userEmail}`);
-//    //             const data = await response.json();
-//             //    setAttendance(data || []);
-//             } catch (error) {
-//                 console.error('Error fetching attendance:', error);
-//             }
-//         };
 
         const fetchSalaryData = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/employee/salary/${userEmail}`);
-                const data = await response.json();
-                setSalary(data || null);
+                const currentResponse = await fetch(`http://localhost:8000/salary`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email: userEmail }),
+                });
+                if (!currentResponse.ok) {
+                    throw new Error('Failed to get salary1.');
+                }
+                const currentData = await currentResponse.json();
+                setCurrentSalary(currentData);
+
+
+                const historyResponse = await fetch(`http://localhost:8000/salary/history`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email: userEmail }),
+                });
+                if (!historyResponse.ok) {
+                    throw new Error('Failed to get salary2.');
+                }
+                const historyData = await historyResponse.json();
+                setSalaryHistory(historyData);
             } catch (error) {
                 console.error('Error fetching salary:', error);
             }
         };
 
-        // fetchAttendanceData();
         fetchSalaryData();
+    }, [userEmail]);
+
+    const chartData = [
+        ["Month", "Salary", "Bonus"],
+        ...salaryHistory.map((item) => [
+            new Date(item.date).toLocaleString("default", { month: "short", year: "numeric" }),
+            item.amount,
+            item.bonus,
+        ]),
+    ];
+
+    const chartOptions = {
+        title: "Salary and Bonus Overview",
+        hAxis: { title: "Month" },
+        vAxis: { title: "Amount" },
+        legend: { position: "bottom" },
+        colors: ["#4285F4", "#EA4335"],
+    };
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(date);
+    };
+
+    useEffect(() => {
+
+        const fetchUserData = async () => {
+            try {
+                const response = await fetch(`http://localhost:8000/getemployee`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email: userEmail }),
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to get USERDAATA.');
+                }
+                const data = await response.json();
+
+                setUserData(data || null);
+            } catch (error) {
+                console.error('Error fetching USERDATA:', error);
+            }
+        };
+
+        fetchUserData();
+    }, [userEmail]);
+
+    useEffect(() => {
+        const checkAdminStatus = async () => {
+            try {
+                const response = await fetch("http://localhost:8000/isadmin", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ email: userEmail }),
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to checkadmin.');
+                }
+
+                const data = await response.json();
+                if (data.isAdmin) {
+                    setIsAdmin(true);
+                }
+            } catch (error) {
+                console.error("Error checking admin status:", error);
+            }
+        };
+
+        checkAdminStatus();
     }, [userEmail]);
 
     const handleLogout = () => {
@@ -171,122 +227,205 @@ const UserDashboard = () => {
                             <p className='user-name'><b>{userData.firstname} {userData.lastname}</b></p>
                             <p><b>Email:</b> {userData.email}</p>
                             <p><b>Phone:</b> {userData.phone}</p>
+                            <p><b>Job:</b> {userData.job || 'Not assigned'}</p> 
                             <p><b>Date of Joining:</b> {userData.dateOfJoining || 'Not available'}</p>
                         </div>
-                        <button className='edit-button'><img src="./edit.png" title='Edit' /> </button>
+                        <button className='edit-button' onClick={() => window.location.href = '/edit-information'}><img src="./edit.png" title='Edit' /> </button>
                     </div>
 
                     <div className="tabs">
                         <button onClick={() => setActiveTab('attendance')} className={activeTab === 'attendance' ? 'active' : ''}>Attendance</button>
                         <button onClick={() => setActiveTab('salary')} className={activeTab === 'salary' ? 'active' : ''}>Salary</button>
                         <button onClick={() => setActiveTab('settings')} className={activeTab === 'settings' ? 'active' : ''}>Settings</button>
+
                     </div>
 
                     <div className="tab-content">
-                        {activeTab === 'attendance' && (
-                            // <div className="attendance-tab">
-                            //     <h2>Attendance</h2>
-                            //     <p><b>Present:</b> {attendance.present || 0}%</p>
-                            //     <p><b>Absent:</b> {attendance.absent || 0}%</p>
-                            //     <p><b>Leave:</b> {attendance.leave || 0}%</p>
-                            //     <p><b>Late:</b> {attendance.late || 0}%</p>
-                            //     <table>
-                            //         <thead>
-                            //             <tr>
-                            //                 <th>Date</th>
-                            //                 <th>Status</th>
-                            //             </tr>
-                            //         </thead>
-                            //         <tbody>
-                            //             {attendance.details?.length > 0 ? (
-                            //                 attendance.details.map((day, index) => (
-                            //                     <tr key={index}>
-                            //                         <td>{new Date(day.date).toLocaleDateString()}</td>
-                            //                         <td>{day.status || 'Absent'}</td>
-                            //                     </tr>
-                            //                 ))
-                            //             ) : (
-                            //                 <tr>
-                            //                     <td colSpan="2">No data available</td>
-                            //                 </tr>
-                            //             )}
-                            //         </tbody>
-                            //     </table>
-                            // </div>
+                        {activeTab === 'attendance' && attendance != null && (
+
                             <div className="attendance-container">
-                                <h1>Attendance</h1>
+                                <h2>Attendance</h2>
 
                                 <div className="stats">
-                                    <div className="stat present">
-                                        Present: 15 <span>(50%)</span>
-                                    </div>
-                                    <div className="stat absent">
-                                        Absent: 5 <span>(16.67%)</span>
-                                    </div>
-                                    <div className="stat late">
-                                        Late: 3 <span>(10%)</span>
-                                    </div>
-                                    <div className="stat leave">
-                                        Leave: 7 <span>(23.33%)</span>
-                                    </div>
+                                    <div className="stat present">Present</div>
+                                    <div className="stat absent">Absent</div>
+                                    <div className="stat late">Late</div>
+                                    <div className="stat leave">Leave</div>
+                                    <div className="stat future">Left-Days</div>
+                                    <div className="stat requested">Requested</div>
                                 </div>
 
-                                <h2>Calendar</h2>
 
-                                <div className="calendar-container">
+
+
+                                <div className='calendar-container'>
                                     <div className='cal-sub-cont'>
-                                    <h3>{currentDate.toLocaleString('default', { month: 'long' })} {currentYear}</h3>
-                                    {renderCalendar(currentYear, currentMonth, calendarData[`${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`] || {})}
+                                        <h3>{attendance.month.previous.name} {attendance.year.previous}</h3>
+                                        <br />
+                                        <hr />
+                                        <div className='calendar'>
+                                            {attendance.attendance
+                                                .filter(entry => entry.date.month === 1)
+                                                .map((entry, index) => (
+                                                    <div
+                                                        className={`${entry.status} calendar-day`}
+                                                        key={index}
+                                                    >
+                                                        {entry.date.day}
+                                                    </div>
+                                                ))}
+                                        </div>
+                                        <br />
+                                        <hr />
+                                        <div className="stats-sub">
+                                            <div className="stat present">
+                                                {attendance.previousMonth.present}
+                                                <span>({attendance.previousMonth.percentages.present}%)</span>
+                                            </div>
+                                            <div className="stat absent">
+                                                {attendance.previousMonth.absent}
+                                                <span>({attendance.previousMonth.percentages.absent}%)</span>
+                                            </div>
+                                            <div className="stat late">
+                                                {attendance.previousMonth.late}
+                                                <span>({attendance.previousMonth.percentages.late}%)</span>
+                                            </div>
+                                            <div className="stat leave">
+                                                {attendance.previousMonth.leave}
+                                                <span>({attendance.previousMonth.percentages.leave}%)</span>
+                                            </div>
+                                            <div className="stat future">
+                                                {attendance.previousMonth.future}
+                                                <span>({attendance.previousMonth.percentages.future}%)</span>
+                                            </div>
+                                            <div className="stat requested">
+                                                {attendance.previousMonth.requested}
+                                                <span>({attendance.previousMonth.percentages.requested}%)</span>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div className='cal-sub-cont'>
-                                    <h3>{new Date(currentYear, currentMonth - 1).toLocaleString('default', { month: 'long' })} {currentMonth === 0 ? currentYear - 1 : currentYear}</h3>
-                                    {renderCalendar(currentYear, currentMonth - 1, calendarData[`${currentYear}-${String(currentMonth).padStart(2, '0')}`] || {})}
+                                        <h3>{attendance.month.current.name} {attendance.year.current}</h3>
+                                        <br />
+                                        <hr />
+                                        <div className='calendar'>
+                                            {attendance.attendance
+                                                .filter(entry => entry.date.month === 2)
+                                                .map((entry, index) => (
+                                                    <div
+                                                        className={`${entry.status} calendar-day`}
+                                                        key={index}
+                                                    >
+                                                        {entry.date.day}
+                                                    </div>
+                                                ))}
+                                        </div>
+                                        <br />
+                                        <hr />
+                                        <div className="stats-sub">
+                                            <div className="stat present">
+                                                {attendance.currentMonth.present}
+                                                <span>({attendance.currentMonth.percentages.present}%)</span>
+                                            </div>
+                                            <div className="stat absent">
+                                                {attendance.currentMonth.absent}
+                                                <span>({attendance.currentMonth.percentages.absent}%)</span>
+                                            </div>
+                                            <div className="stat late">
+                                                {attendance.currentMonth.late}
+                                                <span>({attendance.currentMonth.percentages.late}%)</span>
+                                            </div>
+                                            <div className="stat leave">
+                                                {attendance.currentMonth.leave}
+                                                <span>({attendance.currentMonth.percentages.leave}%)</span>
+                                            </div>
+                                            <div className="stat future">
+                                                {attendance.currentMonth.future}
+                                                <span>({attendance.currentMonth.percentages.future}%)</span>
+                                            </div>
+                                            <div className="stat requested">
+                                                {attendance.currentMonth.requested}
+                                                <span>({attendance.currentMonth.percentages.requested}%)</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
                         )}
 
                         {activeTab === 'salary' && (
-                            <div className="salary-tab">
-                                <h2>Salary</h2>
-                                <p><b>Regular Salary:</b> {salary?.regular || 0}</p>
-                                <p><b>Bonus:</b> {salary?.bonus || 0}</p>
-                                <p><b>Fines:</b> {salary?.fines || 0}</p>
-                                <p><b>Total Salary:</b> {salary?.total || 0}</p>
-                                <h3>Salary History</h3>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Month</th>
-                                            <th>Salary</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {salary?.history?.length > 0 ? (
-                                            salary.history.map((entry, index) => (
-                                                <tr key={index}>
-                                                    <td>{entry.month}</td>
-                                                    <td>{entry.amount}</td>
-                                                </tr>
-                                            ))
-                                        ) : (
+                            <div className="salary-dashboard">
+                                <h2>Salary Dashboard</h2>
+
+                                <div className="current-salary">
+                                    <h2>Current Month&apos;s Salary</h2>
+                                    <p>
+                                        <strong>Amount:</strong> ${currentSalary.amount}
+                                    </p>
+                                    <p>
+                                        <strong>Bonus:</strong>{" "}
+                                        <span className={currentSalary.bonus < 0 ? "negative" : ""}>
+                                            ${currentSalary.bonus}
+                                        </span>
+                                    </p>
+                                    <p>
+                                        <strong>Status:</strong> {currentSalary.status}
+                                    </p>
+                                    <p>
+                                        <strong>Total:</strong> ${currentSalary.amount + (currentSalary.bonus || 0)}
+                                    </p>
+                                </div>
+
+                                <div className="salary-table">
+                                    <h2>Salary History</h2>
+                                    <table>
+                                        <thead>
                                             <tr>
-                                                <td colSpan="2">No data available</td>
+                                                <th>Date</th>
+                                                <th>Amount</th>
+                                                <th>Bonus</th>
+                                                <th>Status</th>
+                                                <th>Total</th>
                                             </tr>
-                                        )}
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            {salaryHistory.map((item) => (
+                                                <tr key={item._id}>
+                                                    <td>{formatDate(item.date)}</td>
+                                                    <td>${item.amount}</td>
+                                                    <td className={item.bonus < 0 ? "negative" : ""}>${item.bonus}</td>
+                                                    <td>{item.status}</td>
+                                                    <td>${item.amount + (item.bonus || 0)}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div className="salary-chart">
+                                    <Chart
+                                        chartType="ColumnChart"
+                                        data={chartData}
+                                        options={chartOptions}
+                                        width="100%"
+                                        height="400px"
+                                    />
+                                </div>
                             </div>
                         )}
+
 
                         {activeTab === 'settings' && (
                             <div className="settings-tab">
                                 <h2>Settings</h2>
                                 <div className="settings">
                                     <button onClick={() => window.location.href = '/reset-password'}>Reset Password</button>
-                                    <button >Edit Information</button>
-                                    <button >Request Admin</button>
-                                    <button >Request Leave</button>
+                                    <button onClick={() => window.location.href = '/edit-information'}>Edit Information</button>
+                                    <button onClick={() => window.location.href = '/leave-req'}>Request Leave</button>
+                                    {isAdmin && (
+                                        <button onClick={() => (window.location.href = "/admin-dashboard")}>Admin Dashboard</button>
+                                    )}
                                     <button className='logout-button' onClick={handleLogout}>Logout</button>
                                 </div>
                             </div>

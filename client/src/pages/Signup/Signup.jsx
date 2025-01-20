@@ -101,7 +101,7 @@ const Signup = () => {
                     />
                     <button type="submit">Sign Up</button>
                 </form>
-                <button className="login-button" onClick={() => navigate('/')}>
+                <button className="login-button" onClick={() => navigate('/login')}>
                     Log In
                 </button>
             </div>

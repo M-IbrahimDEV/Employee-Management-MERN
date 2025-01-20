@@ -9,7 +9,7 @@ router.post('/', async (req, res) => {
 
 
         const { email, oldpassword, newpassword } = req.body;
-        
+        console.log(email, " ", oldpassword, " ", newpassword);
         const user = await Employees.findOne({ email:email });
         if (!user) {
             return res.status(404).json({ message: 'User  not found.' });

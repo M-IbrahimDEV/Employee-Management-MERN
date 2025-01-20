@@ -34,8 +34,33 @@ const validateAdmin = async (req, res, next) => {
     }
 };
 
-// Get this month's salary (and insert if missing)
-router.get('/', async (req, res) => {
+// Function to create default salary entry for current month
+async function createDefaultSalaryEntry(employee) {
+    const currentMonthStart = getCurrentMonthStart();
+    let currentSalary = employee.allsalary.find(
+        (s) => s.date && new Date(s.date).getTime() === currentMonthStart.getTime()
+    );
+
+    if (!currentSalary) {
+        // Get the last salary details
+        const lastSalary = employee.allsalary[employee.allsalary.length - 1] || {};
+
+        // Create a new salary entry for the current month
+        currentSalary = {
+            amount: lastSalary.amount || 0,
+            bonus: 0,
+            date: currentMonthStart,
+            status: 'notpaid',
+        };
+
+        // Add to the array
+        employee.allsalary.push(currentSalary);
+        await employee.save();
+    }
+}
+
+// Get salary history
+router.post('/history', async (req, res) => {
     const { email } = req.body;
 
     if (!email) {
@@ -49,27 +74,40 @@ router.get('/', async (req, res) => {
             return res.status(404).json({ message: "Employee not found." });
         }
 
+        // Check if salary history is empty
+        if (!employee.allsalary || employee.allsalary.length === 0) {
+            return res.json([]); // Return an empty array if no salary history
+        }
+
+        await createDefaultSalaryEntry(employee);
+
+        res.json(employee.allsalary);
+    } catch (error) {
+        console.error("Error fetching salary history:", error);
+        res.status(500).json({ message: "Failed to fetch salary history." });
+    }
+});
+
+router.post('/', async (req, res) => {
+    const { email } = req.body;
+
+    if (!email) {
+        return res.status(400).json({ message: "Employee email is required." });
+    }
+
+    try {
+        const employee = await Employees.findOne({ email });
+
+        if (!employee) {
+            return res.status(404).json({ message: "Employee not found." });
+        }
+
+        await createDefaultSalaryEntry(employee);
+
         const currentMonthStart = getCurrentMonthStart();
-        let currentSalary = employee.allsalary.find(
+        const currentSalary = employee.allsalary.find(
             (s) => s.date && new Date(s.date).getTime() === currentMonthStart.getTime()
         );
-
-        if (!currentSalary) {
-            // Get the last salary details
-            const lastSalary = employee.allsalary[employee.allsalary.length - 1] || {};
-
-            // Create a new salary entry for the current month
-            currentSalary = {
-                amount: lastSalary.amount || 0,
-                bonus: 0,
-                date: currentMonthStart,
-                status: 'notpaid',
-            };
-
-            // Add to the array
-            employee.allsalary.push(currentSalary);
-            await employee.save();
-        }
 
         res.json(currentSalary);
     } catch (error) {
@@ -77,6 +115,7 @@ router.get('/', async (req, res) => {
         res.status(500).json({ message: "Failed to fetch salary." });
     }
 });
+
 
 // Update this month's salary and bonus
 router.patch('/', validateAdmin, async (req, res) => {
@@ -134,26 +173,26 @@ router.patch('/', validateAdmin, async (req, res) => {
 });
 
 // Get salary history
-router.get('/history', async (req, res) => {
-    const { email } = req.body;
+// router.post('/history', async (req, res) => {
+//     const { email } = req.body;
 
-    if (!email) {
-        return res.status(400).json({ message: "Employee email is required." });
-    }
+//     if (!email) {
+//         return res.status(400).json({ message: "Employee email is required." });
+//     }
 
-    try {
-        const employee = await Employees.findOne({ email });
+//     try {
+//         const employee = await Employees.findOne({ email });
 
-        if (!employee) {
-            return res.status(404).json({ message: "Employee not found." });
-        }
+//         if (!employee) {
+//             return res.status(404).json({ message: "Employee not found." });
+//         }
 
-        res.json(employee.allsalary);
-    } catch (error) {
-        console.error("Error fetching salary history:", error);
-        res.status(500).json({ message: "Failed to fetch salary history." });
-    }
-});
+//         res.json(employee.allsalary);
+//     } catch (error) {
+//         console.error("Error fetching salary history:", error);
+//         res.status(500).json({ message: "Failed to fetch salary history." });
+//     }
+// });
 
 
 // Update older month's salary status

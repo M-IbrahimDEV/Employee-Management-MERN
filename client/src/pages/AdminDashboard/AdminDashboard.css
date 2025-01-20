@@ -1,0 +1,422 @@
+/* User Dashboard */
+.admin-dashboard-cont {
+    padding: 20px;
+}
+
+.admin-dashboard-cont h1 {
+    text-align: center;
+    margin: 25px;
+    color: #333;
+    font-size: 45px;
+    font-weight: 600;
+}
+
+.admin-dashboard {
+    background-color: white;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 30px;
+    margin: 50px 0 0;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.admin-dashboard .user-details {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 30px;
+    color: #555555;
+    font-size: 18px;
+    width: 100%;
+    padding: 0 20px 20px;
+}
+
+.admin-dashboard .user-details .user-image {
+    border: 2px solid #eee;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 300px;
+    height: 300px;
+}
+
+.admin-dashboard .user-details .user-image img {
+    object-fit: cover;
+    object-position: center;
+    width: 100%;
+    height: 100%;
+}
+
+.admin-dashboard .user-details .user-data .user-name {
+    font-size: 45px;
+    color: black;
+}
+
+.admin-dashboard .edit-button {
+    background-color: #efefef;
+    align-self: flex-start;
+    color: white;
+    padding: 10px;
+    margin-left: auto;
+    border: none;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 10px;
+}
+
+.admin-dashboard .edit-button:hover {
+    background-color: #dddddd;
+}
+
+.admin-dashboard .tabs {
+    align-self: flex-start;
+    border-bottom: 2px solid #eeeeee;
+    width: 100%;
+    padding-left: 20px;
+}
+
+.admin-dashboard .tabs button {
+    padding: 10px 25px;
+    border: 2px solid #eeeeee;
+    border-bottom: none;
+    margin-right: 5px;
+    border-radius: 10px 10px 0 0;
+}
+
+.admin-dashboard .tabs button:hover {
+    background-color: #dddddd;
+}
+
+.admin-dashboard .tabs .active {
+    background-color: #4a90e2;
+    border: 2px solid #4a90e2;
+    border-bottom: none;
+    color: white;
+}
+
+.admin-dashboard .tabs .active:hover {
+    background-color: #6a5acd;
+    border: 2px solid #6a5acd;
+}
+
+.admin-dashboard .tab-content {
+    width: 100%;
+    padding: 0 20px;
+}
+
+.admin-dashboard .tab-content h2 {
+    text-align: center;
+    margin: 10px;
+    color: #333;
+    font-size: 30px;
+    font-weight: 600;
+}
+
+
+/* General Styles */
+body {
+    line-height: 1.5;
+    color: #333;
+}
+
+/* Approve Tab */
+.approve-tab {
+    padding: 20px;
+    margin: 20px auto;
+}
+
+.approve-tab table {
+    width: 100%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+}
+
+.approve-tab thead {
+    background-color: #f0f0f0;
+}
+
+.approve-tab thead th,
+.approve-tab tbody td {
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+.approve-tab tbody tr:nth-child(odd) {
+    background-color: #fafafa;
+}
+
+.approve-tab tbody tr:nth-child(even) {
+    background-color: #fefefe;
+}
+
+.approve-tab th,
+td {
+    word-wrap: break-word;
+}
+
+/* Button Styles */
+.approve-tab button {
+    padding: 8px 12px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.approve-tab button:hover {
+    opacity: 0.9;
+}
+
+.approve-tab button:active {
+    transform: scale(0.98);
+}
+
+.approve-tab button:first-of-type {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.approve-tab button:first-of-type:hover {
+    background-color: #45a049;
+}
+
+.approve-tab .reject-button {
+    background-color: #f44336;
+    color: white;
+    margin-left: 10px;
+}
+
+.approve-tab .reject-button:hover {
+    background-color: #e53935;
+}
+
+.settings-tab {
+    display: block;
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+}
+
+
+.admin-dashboard .tab-content .settings {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-dashboard .tab-content .settings button {
+    padding: 10px 20px;
+    border: 2px solid #eeeeee;
+    border-radius: 10px;
+}
+
+.admin-dashboard .tab-content .settings button:hover {
+    background-color: #dddddd;
+}
+
+.admin-dashboard .tab-content .settings .logout-button {
+    background-color: #ff4d4d;
+    color: white;
+    margin-left: auto;
+}
+
+.admin-dashboard .tab-content .settings .logout-button:hover {
+    background-color: #e60000;
+    box-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .approve-tab {
+        padding: 15px;
+    }
+
+    .approve-tab table {
+        font-size: 14px;
+    }
+
+    .approve-tab button {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+}
+
+/* Popup Styles */
+.job-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    position: relative;
+}
+
+.close-icon {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-icon:hover {
+    color: #f44336;
+}
+
+.popup-content h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+.popup-input,
+.popup-select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.popup-input:focus,
+.popup-select:focus {
+    border-color: #4a90e2;
+    outline: none;
+}
+
+.popup-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.popup-button {
+    width: 100%;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    margin-bottom: 10px;
+}
+
+.popup-button:last-child {
+    margin-bottom: 0;
+}
+
+.popup-button.edit-button {
+    background-color: #4a90e2;
+    color: white;
+}
+
+.popup-button.edit-button:hover {
+    background-color: #357abd;
+}
+
+.popup-button.delete-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.popup-button.delete-btn:hover {
+    background-color: #e53935;
+}
+
+.popup-button.save-button {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.popup-button.save-button:hover {
+    background-color: #45a049;
+}
+
+.popup-button.cancel-button {
+    background-color: #f44336;
+    color: white;
+}
+
+.popup-button.cancel-button:hover {
+    background-color: #e53935;
+}
+
+.popup-content .readOnly {
+    opacity: 0.7;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    pointer-events: none;
+}
+
+.popup-content .delete-btn {
+    background-color: #f44336;
+    color: white;
+    margin-top: 10px;
+}
+
+.popup-content .delete-btn:hover {
+    background-color: #e53935;
+}
+
+/* General Tab Content Styles */
+.tab-content {
+    width: 100%;
+    padding: 20px;
+}
+
+.tab-content h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+/* Refresh Button */
+.tab-content{
+    position: relative;
+}
+.refresh-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.refresh-button img {
+    width: 20px;
+    height: 20px;
+}
+
+.refresh-button:hover {
+    opacity: 0.8;
+}

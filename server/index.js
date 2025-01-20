@@ -6,6 +6,7 @@ import connectDB from './db/index.js'
 import { signup } from './routes/signup.js'
 import { login } from './routes/login.js'
 import { checkapproved } from './routes/checkapproved.js'
+import { checkadmin } from './routes/checkadmin.js'
 import { passwordreset } from './routes/passwordreset.js'
 import { getEmployee } from './routes/getEmployee.js';
 import { updateEmployee } from './routes/updateEmployee.js';
@@ -39,7 +40,8 @@ app.use('/images', express.static('public/images'));
 app.use('/signup', signup);
 app.use('/login', login);
 app.use('/isapproved', checkapproved);
-app.use('/passwordsreset', passwordreset);
+app.use('/isadmin', checkadmin);
+app.use('/passwordreset', passwordreset);
 app.use('/getemployee', getEmployee);
 app.use('/updateemployee', updateEmployee);
 app.use('/attendence', attendance);
