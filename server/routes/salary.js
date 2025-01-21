@@ -172,39 +172,12 @@ router.patch('/', validateAdmin, async (req, res) => {
     }
 });
 
-// Get salary history
-// router.post('/history', async (req, res) => {
-//     const { email } = req.body;
-
-//     if (!email) {
-//         return res.status(400).json({ message: "Employee email is required." });
-//     }
-
-//     try {
-//         const employee = await Employees.findOne({ email });
-
-//         if (!employee) {
-//             return res.status(404).json({ message: "Employee not found." });
-//         }
-
-//         res.json(employee.allsalary);
-//     } catch (error) {
-//         console.error("Error fetching salary history:", error);
-//         res.status(500).json({ message: "Failed to fetch salary history." });
-//     }
-// });
-
-
 // Update older month's salary status
 router.patch('/status', validateAdmin, async (req, res) => {
-    const { email, date, status } = req.body;
+    const { email, date } = req.body;
 
-    if (!email || !date || !status) {
+    if (!email || !date ) {
         return res.status(400).json({ message: "Email, date, and status are required." });
-    }
-
-    if (status !== 'paid') {
-        return res.status(400).json({ message: "Can only update status to 'paid' for older months." });
     }
 
     try {

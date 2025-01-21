@@ -204,7 +204,8 @@
   .stats-sub {
     
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    /* grid-template-columns: repeat(3, 1fr); */
     gap: 20px;
 
     gap: 10px;
@@ -278,61 +279,6 @@
     color: white;
     border-radius: 4px;
     cursor: default;
-  }
-  
-
-  .salary-dashboard {
-    font-family: Arial, sans-serif;
-    padding: 20px;
-  }
-  
-  h1 {
-    text-align: center;
-    margin-bottom: 30px;
-  }
-  
-  .current-salary,
-  .salary-table,
-  .total-salary,
-  .salary-chart {
-    margin-bottom: 20px;
-  }
-  
-  .current-salary {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    padding: 15px;
-    border-radius: 8px;
-  }
-  
-  .salary-table table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .salary-table th,
-  .salary-table td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: left;
-  }
-  
-  .salary-table th {
-    background-color: #f4f4f4;
-  }
-  
-  .negative {
-    color: red;
-  }
-  
-  .total-salary {
-    font-size: 1.2em;
-    font-weight: bold;
-    text-align: right;
-  }
-  
-  .salary-chart {
-    margin-top: 20px;
   }
   
 

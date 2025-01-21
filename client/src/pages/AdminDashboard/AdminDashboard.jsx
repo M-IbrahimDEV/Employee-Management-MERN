@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AdminDashboard.css';
+import SalaryComp from '../salarycomp/salarycomp'
 
 
 
@@ -8,7 +9,7 @@ const UserDashboard = () => {
     const navigate = useNavigate();
 
 
-    const [activeTab, setActiveTab] = useState('approve');
+    const [activeTab, setActiveTab] = useState('approves');
     const [pendingRequests, setPendingRequests] = useState([]);
     const [allemployees, setAllEmployees] = useState([]);
     const [userData, setUserData] = useState(null);
@@ -21,6 +22,8 @@ const UserDashboard = () => {
     const [showEditPopup, setShowEditPopup] = useState(false);
     const [editJob, setEditJob] = useState('');
     const [editRole, setEditRole] = useState('');
+    const [bigemploye, setBigEmployee] = useState('');
+    const [ showbigpopup , setshowbigpopup] = useState(false);
 
     const adminEmail = localStorage.getItem('email');
 
@@ -285,6 +288,11 @@ const UserDashboard = () => {
         setShowJobPopup(true);
     };
 
+    const showbig = (email) => {
+        setBigEmployee(email);
+        setshowbigpopup(true);
+    };
+
     const closeJobPopup = () => {
         setShowJobPopup(false);
     };
@@ -296,7 +304,6 @@ const UserDashboard = () => {
     const showemppopup = (email) => {
         setSelectedEmployee(email);
         setShowJobPopupemp(true);
-
     }
 
     return (
@@ -326,11 +333,23 @@ const UserDashboard = () => {
                     <div className="tabs">
                         <button onClick={() => setActiveTab('approve')} className={activeTab === 'approve' ? 'active' : ''}>Approve Requests</button>
                         <button onClick={() => setActiveTab('manage')} className={activeTab === 'manage' ? 'active' : ''}>Manage Employees</button>
+                        <button onClick={() => setActiveTab('man-salary')} className={activeTab === 'man-salary' ? 'active' : ''}>Manage Salaries</button>
+                        {/* <button onClick={() => setActiveTab('man-leave')} className={activeTab === 'man-leave' ? 'active' : ''}>Manage Leave Requests</button> */}
                         <button onClick={() => setActiveTab('settings')} className={activeTab === 'settings' ? 'active' : ''}>Settings</button>
 
                     </div>
 
                     <div className="tab-content">
+
+
+
+
+
+
+
+
+
+
 
 
                         {activeTab === 'settings' && (
@@ -339,7 +358,6 @@ const UserDashboard = () => {
                                 <div className="settings">
                                     <button onClick={() => window.location.href = '/reset-password'}>Reset Password</button>
                                     <button onClick={() => window.location.href = '/edit-information'}>Edit Information</button>
-                                    <button onClick={() => window.location.href = '/leave-req'}>Request Leave</button>
                                     <button onClick={() => (window.location.href = "/userdashboard")}>User Dashboard</button>
                                     <button className='logout-button' onClick={handleLogout}>Logout</button>
                                 </div>
@@ -465,6 +483,89 @@ const UserDashboard = () => {
                         )}
 
 
+                        {activeTab === 'man-salary' && (
+                            allemployees.length === 0 ? (
+                                <h2>No Employees.</h2>
+                            ) : (
+                                <div className="approve-tab">
+                                    <h2>Manage Salaries</h2>
+                                    <button
+                                        className="refresh-button"
+                                        onClick={fetchAllEmployees}
+                                    >
+                                        <img src="/refresh.png" alt="Refresh" />
+                                    </button>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Image</th>
+                                                <th>Email</th>
+                                                <th>Name</th>
+                                                <th>Role</th>
+                                                <th>Job</th>
+                                                <th>Phone No</th>
+                                                <th>Date of Joining</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {allemployees.map((request) => (
+                                                request.isApproved && (
+                                                    <tr key={request.email} onClick={() => showbig(request.email)}>
+                                                        <td>
+                                                            {request.image && (
+                                                                <img
+                                                                    src={`http://localhost:8000${request.image}`}
+                                                                    alt={`Profile of ${request.name}`}
+                                                                    style={{
+                                                                        width: '50px',
+                                                                        height: '50px',
+                                                                        borderRadius: '50%',
+                                                                        objectFit: 'cover',
+                                                                        border: '1px solid #ddd',
+                                                                    }}
+                                                                />
+                                                            )}
+                                                        </td>
+                                                        <td>{request.email}</td>
+                                                        <td>{request.firstname} {request.lastname}</td>
+                                                        <td>{request.role}</td>
+                                                        <td>{request.job}</td>
+                                                        <td>{request.phone}</td>
+                                                        <td>{request.dateOfJoining}</td>
+                                                    </tr>
+                                                )
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            )
+                        )}
+
+
+                        {/* {activeTab === 'man-leave' && (
+                            <div className="leaves-tab">
+                                <h2>Manage Leave Requests</h2>
+                                <div className="settings">
+                                    <button onClick={() => window.location.href = '/reset-password'}>Reset Password</button>
+                                    <button onClick={() => window.location.href = '/edit-information'}>Edit Information</button>
+                                    <button onClick={() => window.location.href = '/leave-req'}>Request Leave</button>
+                                    <button onClick={() => (window.location.href = "/userdashboard")}>User Dashboard</button>
+                                    <button className='logout-button' onClick={handleLogout}>Logout</button>
+                                </div>
+                            </div>
+                        )} */}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
                     </div >
@@ -472,8 +573,25 @@ const UserDashboard = () => {
             ) : (
                 <p>Loading...</p>
             )}
-            {showJobPopup &&
-                (
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            {
+                showJobPopup && (
                     <div className="job-popup" onClick={closeJobPopup}>
                         <div className="popup-content" onClick={(e) => e.stopPropagation()}>
                             <span className="close-icon" onClick={closeJobPopupemp}>&times;</span>
@@ -518,6 +636,7 @@ const UserDashboard = () => {
                 )
             }
 
+
             {
                 showJobPopupemp && (
                     <div className="job-popup" onClick={closeJobPopupemp}>
@@ -549,6 +668,8 @@ const UserDashboard = () => {
                     </div>
                 )
             }
+
+
             {
                 showEditPopup && (
                     <div className="job-popup" onClick={() => setShowEditPopup(false)}>
@@ -584,6 +705,29 @@ const UserDashboard = () => {
                     </div>
                 )
             }
+
+            {
+                showbigpopup && (
+                    <div className="showbig-popup" onClick={() => setshowbigpopup(false)}>
+                        <div className="showbig-popup-content" onClick={(e) => e.stopPropagation()}>
+                            <span className="close-icon" onClick={() => setshowbigpopup(false)}>&times;</span>
+                            <SalaryComp email={bigemploye} />
+
+                                                        
+
+                        </div>
+                    </div>
+                )
+            }
+
+
+
+
+
+
+
+
+
 
 
 

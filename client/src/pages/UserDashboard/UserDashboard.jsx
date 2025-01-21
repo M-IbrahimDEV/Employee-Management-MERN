@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './UserDashboard.css';
-import { Chart } from "react-google-charts";
+// import { Chart } from "react-google-charts";
+import SalaryComp from '../salarycomp/salarycomp'
 
 
 
@@ -14,8 +15,8 @@ const UserDashboard = () => {
     const [userData, setUserData] = useState(null);
     const [isAdmin, setIsAdmin] = useState(false);
     const [attendance, setAttendance] = useState(null);
-    const [currentSalary, setCurrentSalary] = useState({});
-    const [salaryHistory, setSalaryHistory] = useState([]);
+    // const [currentSalary, setCurrentSalary] = useState({});
+    // const [salaryHistory, setSalaryHistory] = useState([]);
     const [error, setError] = useState('');
 
     const userEmail = localStorage.getItem('email');
@@ -94,64 +95,64 @@ const UserDashboard = () => {
         fetchAndMarkAttendance();
     }, [userEmail]);
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        const fetchSalaryData = async () => {
-            try {
-                const currentResponse = await fetch(`http://localhost:8000/salary`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ email: userEmail }),
-                });
-                if (!currentResponse.ok) {
-                    throw new Error('Failed to get salary1.');
-                }
-                const currentData = await currentResponse.json();
-                setCurrentSalary(currentData);
+    //     const fetchSalaryData = async () => {
+    //         try {
+    //             const currentResponse = await fetch(`http://localhost:8000/salary`, {
+    //                 method: 'POST',
+    //                 headers: {
+    //                     'Content-Type': 'application/json',
+    //                 },
+    //                 body: JSON.stringify({ email: userEmail }),
+    //             });
+    //             if (!currentResponse.ok) {
+    //                 throw new Error('Failed to get salary1.');
+    //             }
+    //             const currentData = await currentResponse.json();
+    //             setCurrentSalary(currentData);
 
 
-                const historyResponse = await fetch(`http://localhost:8000/salary/history`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ email: userEmail }),
-                });
-                if (!historyResponse.ok) {
-                    throw new Error('Failed to get salary2.');
-                }
-                const historyData = await historyResponse.json();
-                setSalaryHistory(historyData);
-            } catch (error) {
-                console.error('Error fetching salary:', error);
-            }
-        };
+    //             const historyResponse = await fetch(`http://localhost:8000/salary/history`, {
+    //                 method: 'POST',
+    //                 headers: {
+    //                     'Content-Type': 'application/json',
+    //                 },
+    //                 body: JSON.stringify({ email: userEmail }),
+    //             });
+    //             if (!historyResponse.ok) {
+    //                 throw new Error('Failed to get salary2.');
+    //             }
+    //             const historyData = await historyResponse.json();
+    //             setSalaryHistory(historyData);
+    //         } catch (error) {
+    //             console.error('Error fetching salary:', error);
+    //         }
+    //     };
 
-        fetchSalaryData();
-    }, [userEmail]);
+    //     fetchSalaryData();
+    // }, [userEmail]);
 
-    const chartData = [
-        ["Month", "Salary", "Bonus"],
-        ...salaryHistory.map((item) => [
-            new Date(item.date).toLocaleString("default", { month: "short", year: "numeric" }),
-            item.amount,
-            item.bonus,
-        ]),
-    ];
+    // const chartData = [
+    //     ["Month", "Salary", "Bonus"],
+    //     ...salaryHistory.map((item) => [
+    //         new Date(item.date).toLocaleString("default", { month: "short", year: "numeric" }),
+    //         item.amount,
+    //         item.bonus,
+    //     ]),
+    // ];
 
-    const chartOptions = {
-        title: "Salary and Bonus Overview",
-        hAxis: { title: "Month" },
-        vAxis: { title: "Amount" },
-        legend: { position: "bottom" },
-        colors: ["#4285F4", "#EA4335"],
-    };
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        return new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(date);
-    };
+    // const chartOptions = {
+    //     title: "Salary and Bonus Overview",
+    //     hAxis: { title: "Month" },
+    //     vAxis: { title: "Amount" },
+    //     legend: { position: "bottom" },
+    //     colors: ["#4285F4", "#EA4335"],
+    // };
+    // const formatDate = (dateString) => {
+    //     const date = new Date(dateString);
+    //     return new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(date);
+    // };
 
     useEffect(() => {
 
@@ -227,7 +228,7 @@ const UserDashboard = () => {
                             <p className='user-name'><b>{userData.firstname} {userData.lastname}</b></p>
                             <p><b>Email:</b> {userData.email}</p>
                             <p><b>Phone:</b> {userData.phone}</p>
-                            <p><b>Job:</b> {userData.job || 'Not assigned'}</p> 
+                            <p><b>Job:</b> {userData.job || 'Not assigned'}</p>
                             <p><b>Date of Joining:</b> {userData.dateOfJoining || 'Not available'}</p>
                         </div>
                         <button className='edit-button' onClick={() => window.location.href = '/edit-information'}><img src="./edit.png" title='Edit' /> </button>
@@ -241,6 +242,7 @@ const UserDashboard = () => {
                     </div>
 
                     <div className="tab-content">
+
                         {activeTab === 'attendance' && attendance != null && (
 
                             <div className="attendance-container">
@@ -250,9 +252,9 @@ const UserDashboard = () => {
                                     <div className="stat present">Present</div>
                                     <div className="stat absent">Absent</div>
                                     <div className="stat late">Late</div>
-                                    <div className="stat leave">Leave</div>
+                                    {/* <div className="stat leave">Leave</div> */}
                                     <div className="stat future">Left-Days</div>
-                                    <div className="stat requested">Requested</div>
+                                    {/* <div className="stat requested">Requested</div> */}
                                 </div>
 
 
@@ -290,18 +292,18 @@ const UserDashboard = () => {
                                                 {attendance.previousMonth.late}
                                                 <span>({attendance.previousMonth.percentages.late}%)</span>
                                             </div>
-                                            <div className="stat leave">
+                                            {/* <div className="stat leave">
                                                 {attendance.previousMonth.leave}
                                                 <span>({attendance.previousMonth.percentages.leave}%)</span>
-                                            </div>
+                                            </div> */}
                                             <div className="stat future">
                                                 {attendance.previousMonth.future}
                                                 <span>({attendance.previousMonth.percentages.future}%)</span>
                                             </div>
-                                            <div className="stat requested">
+                                            {/* <div className="stat requested">
                                                 {attendance.previousMonth.requested}
                                                 <span>({attendance.previousMonth.percentages.requested}%)</span>
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                     <div className='cal-sub-cont'>
@@ -335,18 +337,18 @@ const UserDashboard = () => {
                                                 {attendance.currentMonth.late}
                                                 <span>({attendance.currentMonth.percentages.late}%)</span>
                                             </div>
-                                            <div className="stat leave">
+                                            {/* <div className="stat leave">
                                                 {attendance.currentMonth.leave}
                                                 <span>({attendance.currentMonth.percentages.leave}%)</span>
-                                            </div>
+                                            </div> */}
                                             <div className="stat future">
                                                 {attendance.currentMonth.future}
                                                 <span>({attendance.currentMonth.percentages.future}%)</span>
                                             </div>
-                                            <div className="stat requested">
+                                            {/* <div className="stat requested">
                                                 {attendance.currentMonth.requested}
                                                 <span>({attendance.currentMonth.percentages.requested}%)</span>
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                 </div>
@@ -355,65 +357,77 @@ const UserDashboard = () => {
                         )}
 
                         {activeTab === 'salary' && (
-                            <div className="salary-dashboard">
-                                <h2>Salary Dashboard</h2>
 
-                                <div className="current-salary">
-                                    <h2>Current Month&apos;s Salary</h2>
-                                    <p>
-                                        <strong>Amount:</strong> ${currentSalary.amount}
-                                    </p>
-                                    <p>
-                                        <strong>Bonus:</strong>{" "}
-                                        <span className={currentSalary.bonus < 0 ? "negative" : ""}>
-                                            ${currentSalary.bonus}
-                                        </span>
-                                    </p>
-                                    <p>
-                                        <strong>Status:</strong> {currentSalary.status}
-                                    </p>
-                                    <p>
-                                        <strong>Total:</strong> ${currentSalary.amount + (currentSalary.bonus || 0)}
-                                    </p>
-                                </div>
 
-                                <div className="salary-table">
-                                    <h2>Salary History</h2>
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Date</th>
-                                                <th>Amount</th>
-                                                <th>Bonus</th>
-                                                <th>Status</th>
-                                                <th>Total</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {salaryHistory.map((item) => (
-                                                <tr key={item._id}>
-                                                    <td>{formatDate(item.date)}</td>
-                                                    <td>${item.amount}</td>
-                                                    <td className={item.bonus < 0 ? "negative" : ""}>${item.bonus}</td>
-                                                    <td>{item.status}</td>
-                                                    <td>${item.amount + (item.bonus || 0)}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
 
-                                <div className="salary-chart">
-                                    <Chart
-                                        chartType="ColumnChart"
-                                        data={chartData}
-                                        options={chartOptions}
-                                        width="100%"
-                                        height="400px"
-                                    />
-                                </div>
-                            </div>
+                            <SalaryComp email={userEmail} />
+
+
+                            // <div className="salary-dashboard">
+                            //     <h2>Salary Dashboard</h2>
+
+                            //     <div className="current-salary">
+                            //         <h2>Current Month&apos;s Salary</h2>
+                            //         <p>
+                            //             <strong>Amount:</strong> ${currentSalary.amount}
+                            //         </p>
+                            //         <p>
+                            //             <strong>Bonus:</strong>{" "}
+                            //             <span className={currentSalary.bonus < 0 ? "negative" : ""}>
+                            //                 ${currentSalary.bonus}
+                            //             </span>
+                            //         </p>
+                            //         <p>
+                            //             <strong>Status:</strong> {currentSalary.status}
+                            //         </p>
+                            //         <p>
+                            //             <strong>Total:</strong> ${currentSalary.amount + (currentSalary.bonus || 0)}
+                            //         </p>
+                            //     </div>
+
+                            //     <div className="salary-table">
+                            //         <h2>Salary History</h2>
+                            //         <table>
+                            //             <thead>
+                            //                 <tr>
+                            //                     <th>Date</th>
+                            //                     <th>Amount</th>
+                            //                     <th>Bonus</th>
+                            //                     <th>Status</th>
+                            //                     <th>Total</th>
+                            //                 </tr>
+                            //             </thead>
+                            //             <tbody>
+                            //                 {salaryHistory.map((item) => (
+                            //                     <tr key={item._id}>
+                            //                         <td>{formatDate(item.date)}</td>
+                            //                         <td>${item.amount}</td>
+                            //                         <td className={item.bonus < 0 ? "negative" : ""}>${item.bonus}</td>
+                            //                         <td>{item.status}</td>
+                            //                         <td>${item.amount + (item.bonus || 0)}</td>
+                            //                     </tr>
+                            //                 ))}
+                            //             </tbody>
+                            //         </table>
+                            //     </div>
+
+                            //     <div className="salary-chart">
+                            //         <Chart
+                            //             chartType="ColumnChart"
+                            //             data={chartData}
+                            //             options={chartOptions}
+                            //             width="100%"
+                            //             height="400px"
+                            //         />
+                            //     </div>
+                            // </div>
+
+
+
+
+
                         )}
+
 
 
                         {activeTab === 'settings' && (
@@ -422,7 +436,9 @@ const UserDashboard = () => {
                                 <div className="settings">
                                     <button onClick={() => window.location.href = '/reset-password'}>Reset Password</button>
                                     <button onClick={() => window.location.href = '/edit-information'}>Edit Information</button>
-                                    <button onClick={() => window.location.href = '/leave-req'}>Request Leave</button>
+                                    {/* {!isAdmin && (
+                                        <button onClick={() => window.location.href = '/leave-req'}>Request Leave</button>
+                                    )} */}
                                     {isAdmin && (
                                         <button onClick={() => (window.location.href = "/admin-dashboard")}>Admin Dashboard</button>
                                     )}
@@ -430,6 +446,8 @@ const UserDashboard = () => {
                                 </div>
                             </div>
                         )}
+
+
                     </div>
                 </div>
             ) : (

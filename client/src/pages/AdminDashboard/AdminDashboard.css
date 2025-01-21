@@ -420,3 +420,177 @@ td {
 .refresh-button:hover {
     opacity: 0.8;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Popup Styles */
+.showbig-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.showbig-popup-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 90vw;
+    text-align: center;
+    position: relative;
+    overflow: hiddens;
+}
+
+.close-icon {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-icon:hover {
+    color: #f44336;
+}
+
+.showbig-popup-content h2 {
+    margin-bottom: 20px;
+    font-size: 30px;
+    font-weight: 600;
+    color: #333;
+}
+
+    /*
+
+.popup-input,
+.popup-select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.popup-input:focus,
+.popup-select:focus {
+    border-color: #4a90e2;
+    outline: none;
+}
+
+.popup-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.popup-button {
+    width: 100%;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    margin-bottom: 10px;
+}
+
+.popup-button:last-child {
+    margin-bottom: 0;
+}
+
+.popup-button.edit-button {
+    background-color: #4a90e2;
+    color: white;
+}
+
+.popup-button.edit-button:hover {
+    background-color: #357abd;
+}
+
+.popup-button.delete-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.popup-button.delete-btn:hover {
+    background-color: #e53935;
+}
+
+.popup-button.save-button {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.popup-button.save-button:hover {
+    background-color: #45a049;
+}
+
+.popup-button.cancel-button {
+    background-color: #f44336;
+    color: white;
+}
+
+.popup-button.cancel-button:hover {
+    background-color: #e53935;
+}
+
+.popup-content .readOnly {
+    opacity: 0.7;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    pointer-events: none;
+}
+
+.popup-content .delete-btn {
+    background-color: #f44336;
+    color: white;
+    margin-top: 10px;
+}
+
+.popup-content .delete-btn:hover {
+    background-color: #e53935;
+} */
